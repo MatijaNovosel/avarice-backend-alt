@@ -1,11 +1,10 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
-  // previewFeatures = []
 }
 
 generator dbml {
@@ -13,26 +12,77 @@ generator dbml {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id String @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  email     String   @unique
-  password  String
-  firstname String?
-  lastname  String?
-  posts     Post[]
-  role      Role
+  email String @unique
+  password String
+  username String?
+  firstName String?
+  lastName String?
+  accounts Account[]
+  categories Category[]
+  role Role
 }
 
-model Post {
-  id        String   @id @default(cuid())
+model Account {
+  id String @id @default(cuid())
+  name String
+  initialBalance Float
+  currency String
+  transactions Transaction[]
+  templates Template[]
+  // Relations
+  author User? @relation(fields: [userId], references: [id])
+  // FK
+  userId String
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String
+  // Relations
+  author User? @relation(fields: [userId], references: [id])
+  parent Category? @relation("ParentCategory", fields: [parentId], references: [id])
+  children Category[] @relation("ParentCategory")
+  transactions Transaction[]
+  templates Template[]
+  // FK
+  userId String
+  parentId String? @unique
+}
+
+model Transaction {
+  id String @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  published Boolean
-  title     String
-  content   String?
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  String?
+  description String
+  amount Float
+  longitude Decimal
+  latitude Decimal
+  // Relations
+  account Account? @relation(fields: [accountId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
+  // FK
+  categoryId String?
+  accountId String?
+  transferAccountId String?
+}
+
+model Template {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  description String
+  amount Float
+  longitude Decimal
+  latitude Decimal
+  // Relations
+  account Account? @relation(fields: [accountId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id])
+  // FK
+  categoryId String?
+  accountId String?
 }
 
 enum Role {

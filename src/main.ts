@@ -13,10 +13,7 @@ import type {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Validation
   app.useGlobalPipes(new ValidationPipe());
-
-  // enable shutdown hook
   app.enableShutdownHooks();
 
   // Prisma Client Exception Filter for unhandled exceptions
@@ -28,7 +25,6 @@ async function bootstrap() {
   const corsConfig = configService.get<CorsConfig>("cors");
   const swaggerConfig = configService.get<SwaggerConfig>("swagger");
 
-  // Swagger Api
   if (swaggerConfig.enabled) {
     const options = new DocumentBuilder()
       .setTitle(swaggerConfig.title || "Nestjs")
@@ -36,11 +32,9 @@ async function bootstrap() {
       .setVersion(swaggerConfig.version || "1.0")
       .build();
     const document = SwaggerModule.createDocument(app, options);
-
     SwaggerModule.setup(swaggerConfig.path || "api", app, document);
   }
 
-  // Cors
   if (corsConfig.enabled) {
     app.enableCors();
   }
