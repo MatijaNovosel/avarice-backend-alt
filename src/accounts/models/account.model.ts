@@ -12,12 +12,12 @@ export class Account extends BaseModel {
   initialBalance: number;
   @Field()
   currency: string;
-  @Field()
-  latitude: number;
   @Field(() => User)
   user: User;
   @Field(() => [Transaction])
-  posts: [Transaction];
+  transactions: [Transaction];
+  @Field(() => [Transaction])
+  transferTransactions: [Transaction];
   @Field(() => [Template])
   templates: [Template];
 }
