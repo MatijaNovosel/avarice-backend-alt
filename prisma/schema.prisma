@@ -30,10 +30,11 @@ model Account {
   name String
   initialBalance Float
   currency String
-  transactions Transaction[]
+  transactions Transaction[] @relation("Account")
+  transferTransactions Transaction[] @relation("TransferAccount")
   templates Template[]
   // Relations
-  author User? @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
   // FK
   userId String
 }
@@ -42,7 +43,7 @@ model Category {
   id String @id @default(cuid())
   name String
   // Relations
-  author User? @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
   parent Category? @relation("ParentCategory", fields: [parentId], references: [id])
   children Category[] @relation("ParentCategory")
   transactions Transaction[]
@@ -61,11 +62,12 @@ model Transaction {
   longitude Decimal
   latitude Decimal
   // Relations
-  account Account? @relation(fields: [accountId], references: [id])
-  category Category? @relation(fields: [categoryId], references: [id])
+  account Account @relation("Account", fields: [accountId], references: [id])
+  transferAccount Account? @relation("TransferAccount", fields: [transferAccountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
   // FK
-  categoryId String?
-  accountId String?
+  categoryId String
+  accountId String
   transferAccountId String?
 }
 
@@ -78,11 +80,11 @@ model Template {
   longitude Decimal
   latitude Decimal
   // Relations
-  account Account? @relation(fields: [accountId], references: [id])
-  category Category? @relation(fields: [categoryId], references: [id])
+  account Account @relation(fields: [accountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
   // FK
-  categoryId String?
-  accountId String?
+  categoryId String
+  accountId String
 }
 
 enum Role {
