@@ -4,51 +4,30 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.deleteMany();
-  await prisma.post.deleteMany();
-
-  console.log("Seeding...");
-
-  const user1 = await prisma.user.create({
+  await prisma.transaction.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.account.deleteMany();
+  await prisma.template.deleteMany();
+  await prisma.user.create({
     data: {
       email: "lisa@simpson.com",
-      firstname: "Lisa",
-      lastname: "Simpson",
+      username: "lisa",
+      firstName: "Lisa",
+      lastName: "Simpson",
       password: "$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm", // secret42
-      role: "USER",
-      posts: {
-        create: {
-          title: "Join us for Prisma Day 2019 in Berlin",
-          content: "https://www.prisma.io/day/",
-          published: true
-        }
-      }
+      role: "USER"
     }
   });
-  const user2 = await prisma.user.create({
+  await prisma.user.create({
     data: {
       email: "bart@simpson.com",
-      firstname: "Bart",
-      lastname: "Simpson",
+      username: "bart",
+      firstName: "Bart",
+      lastName: "Simpson",
       role: "ADMIN",
-      password: "$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm", // secret42
-      posts: {
-        create: [
-          {
-            title: "Subscribe to GraphQL Weekly for community news",
-            content: "https://graphqlweekly.com/",
-            published: true
-          },
-          {
-            title: "Follow Prisma on Twitter",
-            content: "https://twitter.com/prisma",
-            published: false
-          }
-        ]
-      }
+      password: "$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm" // secret42
     }
   });
-
-  console.log({ user1, user2 });
 }
 
 main()

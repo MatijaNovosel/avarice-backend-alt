@@ -125,7 +125,7 @@ export default async () => {
           }
         ],
         [
-          import("./posts/models/post-connection.model"),
+          import("./transactions/models/transaction-connection.model"),
           { PostConnection: {} }
         ],
         [

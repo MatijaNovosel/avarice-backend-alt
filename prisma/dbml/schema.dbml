@@ -8,7 +8,7 @@ Table User {
   updatedAt DateTime [not null]
   email String [unique, not null]
   password String [not null]
-  username String
+  username String [not null]
   firstName String
   lastName String
   accounts Account [not null]
@@ -22,15 +22,16 @@ Table Account {
   initialBalance Float [not null]
   currency String [not null]
   transactions Transaction [not null]
+  transferTransactions Transaction [not null]
   templates Template [not null]
-  author User
+  user User [not null]
   userId String [not null]
 }
 
 Table Category {
   id String [pk]
   name String [not null]
-  author User
+  user User [not null]
   parent Category
   children Category [not null]
   transactions Transaction [not null]
@@ -47,10 +48,11 @@ Table Transaction {
   amount Float [not null]
   longitude Decimal [not null]
   latitude Decimal [not null]
-  account Account
-  category Category
-  categoryId String
-  accountId String
+  account Account [not null]
+  transferAccount Account
+  category Category [not null]
+  categoryId String [not null]
+  accountId String [not null]
   transferAccountId String
 }
 
@@ -62,10 +64,10 @@ Table Template {
   amount Float [not null]
   longitude Decimal [not null]
   latitude Decimal [not null]
-  account Account
-  category Category
-  categoryId String
-  accountId String
+  account Account [not null]
+  category Category [not null]
+  categoryId String [not null]
+  accountId String [not null]
 }
 
 Enum Role {
@@ -80,6 +82,8 @@ Ref: Category.userId > User.id
 Ref: Category.parentId - Category.id
 
 Ref: Transaction.accountId > Account.id
+
+Ref: Transaction.transferAccountId > Account.id
 
 Ref: Transaction.categoryId > Category.id
 

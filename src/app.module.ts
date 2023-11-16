@@ -9,7 +9,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import config from "./common/configs/config";
 import { GqlConfigService } from "./gql-config.service";
-import { PostsModule } from "./posts/posts.module";
+import { TransactionsModule } from "./transactions/transactions.module";
 import { UsersModule } from "./users/users.module";
 
 @Module({
@@ -19,7 +19,6 @@ import { UsersModule } from "./users/users.module";
       isGlobal: true,
       prismaServiceOptions: {
         middlewares: [
-          // configure your prisma middleware
           loggingMiddleware({
             logger: new Logger("PrismaMiddleware"),
             logLevel: "log"
@@ -27,15 +26,13 @@ import { UsersModule } from "./users/users.module";
         ]
       }
     }),
-
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useClass: GqlConfigService
     }),
-
     AuthModule,
     UsersModule,
-    PostsModule
+    TransactionsModule
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver]
