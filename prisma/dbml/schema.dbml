@@ -31,6 +31,9 @@ Table Account {
 Table Category {
   id String [pk]
   name String [not null]
+  icon String [not null]
+  color String [not null]
+  system Boolean [not null]
   user User [not null]
   parent Category
   children Category [not null]

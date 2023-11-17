@@ -8,6 +8,12 @@ import { User } from "src/users/models/user.model";
 export class Category extends BaseModel {
   @Field()
   name: string;
+  @Field()
+  color: string;
+  @Field()
+  icon: string;
+  @Field()
+  system: boolean;
   @Field(() => User)
   user: User;
   @Field(() => Category, { nullable: true })

@@ -42,6 +42,9 @@ model Account {
 model Category {
   id String @id @default(cuid())
   name String
+  icon String
+  color String
+  system Boolean
   // Relations
   user User @relation(fields: [userId], references: [id])
   parent Category? @relation("ParentCategory", fields: [parentId], references: [id])
