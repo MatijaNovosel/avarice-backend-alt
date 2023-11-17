@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Account } from "src/accounts/models/account.model";
-import { Category } from "src/categories/models/category.model";
-import { BaseModel } from "src/common/models/base.model";
+import { Account } from "../../accounts/models/account.model";
+import { Category } from "../../categories/models/category.model";
+import { BaseModel } from "../../common/models/base.model";
 
 @ObjectType()
 export class Transaction extends BaseModel {
@@ -13,10 +13,10 @@ export class Transaction extends BaseModel {
   longitude: number;
   @Field()
   latitude: number;
-  @Field(() => Account)
-  account: Account;
+  @Field(() => Account, { nullable: true })
+  account?: Account | null;
   @Field(() => Account, { nullable: true })
   transferAccount?: Account | null;
-  @Field(() => Category)
-  category: Category;
+  @Field(() => Category, { nullable: true })
+  category?: Category | null;
 }

@@ -2,16 +2,48 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Account {
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  currency: String!
+  id: ID!
+  initialBalance: Int!
+  name: String!
+  templates: [Template!]
+  transactions: [Transaction!]
+  transferTransactions: [Transaction!]
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+  user: User
+}
+
 type Auth {
-  """
-  JWT access token
-  """
+  """JWT access token"""
   accessToken: JWT!
-  """
-  JWT refresh token
-  """
+
+  """JWT refresh token"""
   refreshToken: JWT!
   user: User!
+}
+
+type Category {
+  children: [Category!]
+  color: String!
+
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  icon: String!
+  id: ID!
+  name: String!
+  parent: Category
+  system: Boolean!
+  templates: [Template!]
+  transactions: [Transaction!]
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+  user: User
 }
 
 input ChangePasswordInput {
@@ -19,9 +51,13 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
-input CreatePostInput {
-  content: String!
-  title: String!
+input CreateTransactionInput {
+  accountId: String!
+  amount: Int!
+  categoryId: String!
+  description: String!
+  latitude: Int!
+  longitude: Int!
 }
 
 """
@@ -41,10 +77,10 @@ input LoginInput {
 
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
-  createPost(data: CreatePostInput!): Post!
-  login(data: LoginInput!): Auth!
+  createTransaction(data: CreateTransactionInput!): Transaction!
   refreshToken(token: JWT!): Token!
-  signup(data: SignupInput!): Auth!
+  signIn(data: LoginInput!): Auth!
+  signUp(data: SignupInput!): Auth!
   updateUser(data: UpdateUserInput!): User!
 }
 
@@ -63,49 +99,19 @@ type PageInfo {
   startCursor: String
 }
 
-type Post {
-  author: User
-  content: String
-  """
-  Identifies the date and time when the object was created.
-  """
-  createdAt: DateTime!
-  id: ID!
-  published: Boolean!
-  title: String!
-  """
-  Identifies the date and time when the object was last updated.
-  """
-  updatedAt: DateTime!
-}
-
-type PostConnection {
-  edges: [PostEdge!]
-  pageInfo: PageInfo!
-  totalCount: Int!
-}
-
-type PostEdge {
-  cursor: String!
-  node: Post!
-}
-
 input PostOrder {
   direction: OrderDirection!
 }
 
 type Query {
+  getTransactionById: Transaction!
+  getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
   hello(name: String!): String!
   helloWorld: String!
   me: User!
-  post: Post!
-  publishedPosts(orderBy: PostOrder, query: String): PostConnection!
-  userPosts: [Post!]!
 }
 
-"""
-User role
-"""
+"""User role"""
 enum Role {
   ADMIN
   USER
@@ -116,22 +122,63 @@ input SignupInput {
   firstname: String
   lastname: String
   password: String!
+  username: String!
 }
 
 type Subscription {
-  postCreated: Post!
+  transactionCreated: Transaction!
+}
+
+type Template {
+  account: Account
+  amount: Int!
+  category: Category
+
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  latitude: Int!
+  longitude: Int!
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
 }
 
 type Token {
-  """
-  JWT access token
-  """
+  """JWT access token"""
   accessToken: JWT!
 
-  """
-  JWT refresh token
-  """
+  """JWT refresh token"""
   refreshToken: JWT!
+}
+
+type Transaction {
+  account: Account
+  amount: Int!
+  category: Category
+
+  """Identifies the date and time when the object was created."""
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  latitude: Int!
+  longitude: Int!
+  transferAccount: Account
+
+  """Identifies the date and time when the object was last updated."""
+  updatedAt: DateTime!
+}
+
+type TransactionConnection {
+  edges: [TransactionEdge!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type TransactionEdge {
+  cursor: String!
+  node: Transaction!
 }
 
 input UpdateUserInput {
@@ -140,18 +187,19 @@ input UpdateUserInput {
 }
 
 type User {
-  """
-  Identifies the date and time when the object was created.
-  """
+  accounts: [Account!]
+  categories: [Category!]
+
+  """Identifies the date and time when the object was created."""
   createdAt: DateTime!
   email: String!
-  firstname: String
+  firstName: String
   id: ID!
-  lastname: String
-  posts: [Post!]
+  lastName: String
   role: Role!
-  """
-  Identifies the date and time when the object was last updated.
-  """
+  transactions: [Transaction!]
+
+  """Identifies the date and time when the object was last updated."""
   updatedAt: DateTime!
+  username: String!
 }

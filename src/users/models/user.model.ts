@@ -7,10 +7,10 @@ import {
 import { Role } from "@prisma/client";
 import { IsEmail } from "class-validator";
 import "reflect-metadata";
-import { Account } from "src/accounts/models/account.model";
-import { Category } from "src/categories/models/category.model";
-import { BaseModel } from "src/common/models/base.model";
-import { Transaction } from "src/transactions/models/transaction.model";
+import { Account } from "../../accounts/models/account.model";
+import { Category } from "../../categories/models/category.model";
+import { BaseModel } from "../../common/models/base.model";
+import { Transaction } from "../../transactions/models/transaction.model";
 
 registerEnumType(Role, {
   name: "Role",
@@ -30,12 +30,12 @@ export class User extends BaseModel {
   username: string;
   @Field(() => Role)
   role: Role;
-  @Field(() => [Transaction])
-  transactions: [Transaction];
-  @Field(() => [Account])
-  accounts: [Account];
-  @Field(() => [Category])
-  categories: [Category];
+  @Field(() => [Transaction], { nullable: true })
+  transactions?: [Transaction] | null;
+  @Field(() => [Account], { nullable: true })
+  accounts?: [Account] | null;
+  @Field(() => [Category], { nullable: true })
+  categories?: [Category] | null;
   @HideField()
   password: string;
 }

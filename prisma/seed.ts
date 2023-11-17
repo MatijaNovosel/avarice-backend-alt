@@ -3,9 +3,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.category.deleteMany();
-  await prisma.template.deleteMany();
   await prisma.transaction.deleteMany();
+  await prisma.template.deleteMany();
+  await prisma.category.deleteMany();
   await prisma.account.deleteMany();
   await prisma.user.deleteMany();
   const user1 = await prisma.user.create({
