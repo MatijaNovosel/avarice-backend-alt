@@ -7,10 +7,10 @@ import { GqlAuthGuard } from "../auth/gql-auth.guard";
 import { UserEntity } from "../common/decorators/user.decorator";
 import { PaginationArgs } from "../common/pagination/pagination.args";
 import { User } from "../users/models/user.model";
-import { TransactionIdArgs } from "./args/post-id.args";
-import { CreatePostInput } from "./dto/createPost.input";
+import { TransactionIdArgs } from "./args/transaction-id.args";
+import { CreateTransactionInput } from "./dto/createTransaction.input";
 import { PostOrder } from "./dto/post-order.input";
-import { PostConnection } from "./models/transaction-connection.model";
+import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
 
 const pubSub = new PubSub();
@@ -20,28 +20,23 @@ export class TransactionsResolver {
   constructor(private prisma: PrismaService) {}
 
   @Subscription(() => Transaction)
-  postCreated() {
-    return pubSub.asyncIterator("postCreated");
+  transactionCreated() {
+    return pubSub.asyncIterator("transactionCreated");
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Transaction)
-  async createPost(@Args("data") data: CreatePostInput) {
-    const newPost = this.prisma.transaction.create({
-      data: {
-        description: data.title,
-        amount: 200,
-        latitude: 1,
-        longitude: 2,
-        accountId: "",
-        categoryId: ""
-      }
+  async createTransaction(@Args("data") data: CreateTransactionInput) {
+    const newTransaction = this.prisma.transaction.create({
+      data
     });
-    pubSub.publish("postCreated", { postCreated: newPost });
-    return newPost;
+    pubSub.publish("transactionCreated", {
+      transactionCreated: newTransaction
+    });
+    return newTransaction;
   }
 
-  @Query(() => PostConnection)
+  @Query(() => TransactionConnection)
   async getTransactions(
     @UserEntity() user: User,
     @Args() { after, before, first, last }: PaginationArgs,
@@ -82,7 +77,7 @@ export class TransactionsResolver {
   }
 
   @Query(() => Transaction)
-  async post(@Args() id: TransactionIdArgs) {
+  async getTransactionById(@Args() id: TransactionIdArgs) {
     return this.prisma.transaction.findUnique({
       where: { id: id.transactionId }
     });
