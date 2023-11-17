@@ -29,7 +29,7 @@ Start the PostgreSQL database
 ```bash
 docker-compose -f docker-compose.db.yml up -d
 # or
-npm run docker:db
+yarn docker:db
 ```
 
 ### 3. Prisma Migrate
@@ -45,7 +45,7 @@ Use Prisma Migrate in your [development environment](https://www.prisma.io/blog/
 ```bash
 npx prisma migrate dev
 # or
-npm run migrate:dev
+yarn migrate:dev
 ```
 
 If you like to customize your `migration.sql` file run the following command. After making your customizations run `npx prisma migrate dev` to apply it.
@@ -53,7 +53,7 @@ If you like to customize your `migration.sql` file run the following command. Af
 ```bash
 npx prisma migrate dev --create-only
 # or
-npm run migrate:dev:create
+yarn migrate:dev:create
 ```
 
 If you are happy with your database changes you want to deploy those changes to your [production database](https://www.prisma.io/blog/prisma-migrate-preview-b5eno5g08d0b#applying-migrations-in-production-and-other-environments). Use `prisma migrate deploy` to apply all pending migrations, can also be used in CI/CD pipelines as it works without prompts.
@@ -61,7 +61,7 @@ If you are happy with your database changes you want to deploy those changes to 
 ```bash
 npx prisma migrate deploy
 # or
-npm run migrate:deploy
+yarn migrate:deploy
 ```
 
 ### 4. Prisma: Prisma Client JS
@@ -75,7 +75,7 @@ Generate Prisma Client JS by running
 ```bash
 npx prisma generate
 # or
-npm run prisma:generate
+yarn prisma:generate
 ```
 
 ### 5. Seed the database data with this script
@@ -83,7 +83,7 @@ npm run prisma:generate
 Execute the script with this command:
 
 ```bash
-npm run seed
+yarn seed
 ```
 
 ### 6. Start NestJS Server
@@ -91,16 +91,16 @@ npm run seed
 Run Nest Server in Development mode:
 
 ```bash
-npm run start
+yarn start
 
 # watch mode
-npm run start:dev
+yarn start:dev
 ```
 
 Run Nest Server in Production mode:
 
 ```bash
-npm run start:prod
+yarn start:prod
 ```
 
 GraphQL Playground for the NestJS Server is available here: http://localhost:3000/graphql
@@ -171,12 +171,12 @@ You can also setup a the database and Nest application with the docker-compose
 # building new NestJS docker image
 docker-compose build
 # or
-npm run docker:build
+yarn docker:build
 
 # start docker-compose
 docker-compose up -d
 # or
-npm run docker
+yarn docker
 ```
 
 ## Schema Development
@@ -188,8 +188,8 @@ npx prisma generate
 # or in watch mode
 npx prisma generate --watch
 # or
-npm run prisma:generate
-npm run prisma:generate:watch
+yarn prisma:generate
+yarn prisma:generate:watch
 ```
 
 ## NestJS - Api Schema

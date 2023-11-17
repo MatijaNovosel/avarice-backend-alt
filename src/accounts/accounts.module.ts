@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
+import { AccountsResolver } from "./accounts.resolver";
 
 @Module({
   imports: [],
-  providers: []
+  providers: [AccountsResolver]
 })
 export class AccountsModule {}

@@ -106,6 +106,8 @@ input PostOrder {
 type Query {
   getTransactionById: Transaction!
   getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
+  getUserAccounts: [Account!]!
+  getUserCategories: [Category!]!
   hello(name: String!): String!
   helloWorld: String!
   me: User!

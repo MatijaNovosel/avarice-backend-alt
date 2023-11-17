@@ -1,8 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Template } from "../../templates/models/template.model";
-import { User } from "../../users/models/user.model";
-import { Transaction } from "../../transactions/models/transaction.model";
 import { BaseModel } from "../../common/models/base.model";
+import { Template } from "../../templates/models/template.model";
+import { Transaction } from "../../transactions/models/transaction.model";
+import { User } from "../../users/models/user.model";
 
 @ObjectType()
 export class Account extends BaseModel {
