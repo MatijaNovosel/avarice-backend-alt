@@ -18,6 +18,13 @@ type Account {
   user: User
 }
 
+type AccountBalanceModel {
+  balance: Int!
+  currency: String!
+  id: String!
+  name: String!
+}
+
 type Auth {
   """JWT access token"""
   accessToken: JWT!
@@ -106,7 +113,7 @@ input PostOrder {
 type Query {
   getTransactionById: Transaction!
   getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
-  getUserAccounts: [Account!]!
+  getUserAccounts: [AccountBalanceModel!]!
   getUserCategories: [Category!]!
   hello(name: String!): String!
   helloWorld: String!
