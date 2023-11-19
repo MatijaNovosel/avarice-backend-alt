@@ -16,6 +16,7 @@ import { Transaction } from "./models/transaction.model";
 const pubSub = new PubSub();
 
 @Resolver(() => Transaction)
+@UseGuards(GqlAuthGuard)
 export class TransactionsResolver {
   constructor(private prisma: PrismaService) {}
 
@@ -52,7 +53,7 @@ export class TransactionsResolver {
     const transactions = await findManyCursorConnection(
       (args) =>
         this.prisma.transaction.findMany({
-          include: { account: true },
+          include: { account: true, category: true },
           where: {
             description: { contains: query || "" },
             account: {
