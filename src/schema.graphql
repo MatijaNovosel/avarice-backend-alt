@@ -25,6 +25,16 @@ type AccountBalanceModel {
   name: String!
 }
 
+input AccountHistoryInput {
+  accountId: String!
+  timePeriod: Int!
+}
+
+type AccountHistoryModel {
+  amount: Int!
+  date: DateTime!
+}
+
 type Auth {
   """JWT access token"""
   accessToken: JWT!
@@ -111,6 +121,7 @@ input PostOrder {
 }
 
 type Query {
+  getAccountHistory(data: AccountHistoryInput!): [AccountHistoryModel!]!
   getTransactionById: Transaction!
   getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
   getUserAccounts: [AccountBalanceModel!]!

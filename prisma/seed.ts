@@ -65,8 +65,18 @@ async function main() {
   });
   await prisma.transaction.create({
     data: {
-      amount: 200,
-      description: "Food",
+      amount: -200,
+      description: "Food 1",
+      accountId: account1.id,
+      categoryId: restaurantFastFoodCategory.id,
+      latitude: 0,
+      longitude: 0
+    }
+  });
+  await prisma.transaction.create({
+    data: {
+      amount: -200,
+      description: "Food 2",
       accountId: account1.id,
       categoryId: restaurantFastFoodCategory.id,
       latitude: 0,
