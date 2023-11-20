@@ -9,8 +9,8 @@ const config: Config = {
   },
   swagger: {
     enabled: true,
-    title: "Nestjs FTW",
-    description: "The nestjs API description",
+    title: "Avarice backend",
+    description: "Avarice backend",
     version: "1.5",
     path: "api"
   },
@@ -21,7 +21,7 @@ const config: Config = {
     sortSchema: true
   },
   security: {
-    expiresIn: "2m",
+    expiresIn: "1d",
     refreshIn: "7d",
     bcryptSaltOrRound: 10
   }

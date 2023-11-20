@@ -65,7 +65,7 @@ async function main() {
   });
   await prisma.transaction.create({
     data: {
-      createdAt: new Date("2023-11-18"),
+      createdAt: new Date("2023-11-17"),
       amount: -200,
       description: "Food 1",
       accountId: account1.id,
@@ -76,9 +76,20 @@ async function main() {
   });
   await prisma.transaction.create({
     data: {
-      createdAt: new Date("2023-11-19"),
+      createdAt: new Date("2023-11-18"),
       amount: -200,
       description: "Food 2",
+      accountId: account1.id,
+      categoryId: restaurantFastFoodCategory.id,
+      latitude: 0,
+      longitude: 0
+    }
+  });
+  await prisma.transaction.create({
+    data: {
+      createdAt: new Date("2023-11-19"),
+      amount: 200,
+      description: "Money",
       accountId: account1.id,
       categoryId: restaurantFastFoodCategory.id,
       latitude: 0,

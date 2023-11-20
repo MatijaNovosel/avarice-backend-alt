@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "nestjs-prisma";
+import { ONE_DAY } from "../utils/constants";
 import { sameDate } from "../utils/helpers";
 import { TimePeriod } from "./constants/timePeriod";
 import { AccountBalanceModel } from "./models/accountBalance.model";
@@ -75,7 +76,7 @@ export class AccountsService {
     const days = this.calculateDaysFromTimePeriod(timePeriod);
     const toPeriod = new Date();
     const fromPeriod = new Date();
-    fromPeriod.setTime(fromPeriod.getTime() - 24 * 60 * 60 * 1000 * days); // Subtract N days from current date
+    fromPeriod.setTime(fromPeriod.getTime() - ONE_DAY * days); // Subtract N days from current date
 
     const transactions = account.transactions.filter(
       (t) => t.createdAt >= fromPeriod && t.createdAt <= toPeriod
@@ -104,7 +105,7 @@ export class AccountsService {
       }
       for (let i = 1; i <= days; i++) {
         const date = new Date();
-        date.setTime(date.getTime() - 24 * 60 * 60 * 1000 * (i - 1));
+        date.setTime(date.getTime() - ONE_DAY * (i - 1));
 
         const transactionsAtDate = transactions.filter((t) =>
           sameDate(t.createdAt, date)
@@ -128,7 +129,7 @@ export class AccountsService {
     } else {
       for (let i = 1; i <= days; i++) {
         const date = new Date();
-        date.setTime(date.getTime() - 24 * 60 * 60 * 1000 * (i - 1));
+        date.setTime(date.getTime() - ONE_DAY * (i - 1));
         result.push({
           amount: accountBalance,
           date
