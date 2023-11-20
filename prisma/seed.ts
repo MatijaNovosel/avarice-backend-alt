@@ -65,6 +65,7 @@ async function main() {
   });
   await prisma.transaction.create({
     data: {
+      createdAt: new Date("2023-11-18"),
       amount: -200,
       description: "Food 1",
       accountId: account1.id,
@@ -75,6 +76,7 @@ async function main() {
   });
   await prisma.transaction.create({
     data: {
+      createdAt: new Date("2023-11-19"),
       amount: -200,
       description: "Food 2",
       accountId: account1.id,

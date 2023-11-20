@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "nestjs-prisma";
+import { sameDate } from "../utils/helpers";
 import { TimePeriod } from "./constants/timePeriod";
 import { AccountBalanceModel } from "./models/accountBalance.model";
 import { AccountHistoryModel } from "./models/accountHistory.model";
@@ -82,13 +83,16 @@ export class AccountsService {
 
     if (transactions.length != 0) {
       let currAmount = accountBalance;
+
       result.push({
         amount: currAmount,
         date: new Date()
       });
-      const transactionsNow = transactions.filter(
-        (t) => t.createdAt === new Date()
+
+      const transactionsNow = transactions.filter((t) =>
+        sameDate(t.createdAt, new Date())
       );
+
       if (transactionsNow.length != 0) {
         for (const t of transactionsNow) {
           if (t.amount < 0) {
@@ -101,18 +105,21 @@ export class AccountsService {
       for (let i = 1; i <= days; i++) {
         const date = new Date();
         date.setTime(date.getTime() - 24 * 60 * 60 * 1000 * (i - 1));
-        const transactionsAtDate = transactions.filter(
-          (t) => t.createdAt === date
+
+        const transactionsAtDate = transactions.filter((t) =>
+          sameDate(t.createdAt, date)
         );
+
         if (transactionsAtDate.length != 0) {
           for (const t of transactionsAtDate) {
             if (t.amount < 0) {
-              currAmount += t.amount - 1;
+              currAmount += t.amount * -1;
             } else {
               currAmount -= t.amount;
             }
           }
         }
+
         result.push({
           amount: currAmount,
           date
