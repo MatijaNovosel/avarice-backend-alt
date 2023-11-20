@@ -4,6 +4,7 @@ import { ONE_DAY } from "../utils/constants";
 import { sameDate } from "../utils/helpers";
 import { TimePeriod } from "./constants/timePeriod";
 import { AccountBalanceModel } from "./models/accountBalance.model";
+import { AccountExpenseAndIncomeModel } from "./models/accountExpenseAndIncome.model";
 import { AccountHistoryModel } from "./models/accountHistory.model";
 
 @Injectable()
@@ -39,10 +40,9 @@ export class AccountsService {
 
     for (const account of accounts) {
       result.push({
-        balance: account.transactions.reduce(
-          (acc, curr) => curr.amount + acc,
-          0
-        ),
+        balance:
+          account.initialBalance +
+          account.transactions.reduce((acc, curr) => curr.amount + acc, 0),
         id: account.id,
         name: account.name,
         currency: account.currency
@@ -50,6 +50,36 @@ export class AccountsService {
     }
 
     return result;
+  }
+
+  async getExpenseAndIncomeInTimePeriod(
+    id: string,
+    timePeriod: number
+  ): Promise<AccountExpenseAndIncomeModel> {
+    const to = new Date();
+    const from = new Date();
+    const days = this.calculateDaysFromTimePeriod(timePeriod);
+    from.setTime(from.getTime() - ONE_DAY * days);
+
+    const transactions = await this.prisma.transaction.findMany({
+      include: { account: true },
+      where: {
+        accountId: id,
+        createdAt: {
+          gte: from,
+          lte: to
+        }
+      }
+    });
+
+    return {
+      expense: transactions
+        .filter((t) => t.amount < 0)
+        .reduce((acc, curr) => acc + curr.amount * -1, 0),
+      income: transactions
+        .filter((t) => t.amount > 0)
+        .reduce((acc, curr) => acc + curr.amount, 0)
+    };
   }
 
   async getAccountHistory(
@@ -74,12 +104,12 @@ export class AccountsService {
     accountBalance += sum;
 
     const days = this.calculateDaysFromTimePeriod(timePeriod);
-    const toPeriod = new Date();
-    const fromPeriod = new Date();
-    fromPeriod.setTime(fromPeriod.getTime() - ONE_DAY * days); // Subtract N days from current date
+    const to = new Date();
+    const from = new Date();
+    from.setTime(from.getTime() - ONE_DAY * days);
 
     const transactions = account.transactions.filter(
-      (t) => t.createdAt >= fromPeriod && t.createdAt <= toPeriod
+      (t) => t.createdAt >= from && t.createdAt <= to
     );
 
     if (transactions.length != 0) {

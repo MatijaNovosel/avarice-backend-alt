@@ -5,9 +5,11 @@ import { GqlAuthGuard } from "../auth/gql-auth.guard";
 import { UserEntity } from "../common/decorators/user.decorator";
 import { User } from "../users/models/user.model";
 import { AccountsService } from "./accounts.service";
+import { AccountExpenseAndIncomeInput } from "./dto/accountExpenseAndIncome.input";
 import { AccountHistoryInput } from "./dto/accountHistory.input";
 import { Account } from "./models/account.model";
 import { AccountBalanceModel } from "./models/accountBalance.model";
+import { AccountExpenseAndIncomeModel } from "./models/accountExpenseAndIncome.model";
 import { AccountHistoryModel } from "./models/accountHistory.model";
 
 @Resolver(() => Account)
@@ -33,5 +35,18 @@ export class AccountsResolver {
       timePeriod
     );
     return history;
+  }
+
+  @Query(() => AccountExpenseAndIncomeModel)
+  async getExpenseAndIncomeInTimePeriod(
+    @Args("data")
+    { accountId, timePeriod }: AccountExpenseAndIncomeInput
+  ) {
+    const expensesAndIncome =
+      await this.accountService.getExpenseAndIncomeInTimePeriod(
+        accountId,
+        timePeriod
+      );
+    return expensesAndIncome;
   }
 }

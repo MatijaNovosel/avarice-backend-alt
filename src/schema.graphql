@@ -25,6 +25,16 @@ type AccountBalanceModel {
   name: String!
 }
 
+input AccountExpenseAndIncomeInput {
+  accountId: String!
+  timePeriod: Int!
+}
+
+type AccountExpenseAndIncomeModel {
+  expense: Int!
+  income: Int!
+}
+
 input AccountHistoryInput {
   accountId: String!
   timePeriod: Int!
@@ -122,6 +132,7 @@ input PostOrder {
 
 type Query {
   getAccountHistory(data: AccountHistoryInput!): [AccountHistoryModel!]!
+  getExpenseAndIncomeInTimePeriod(data: AccountExpenseAndIncomeInput!): AccountExpenseAndIncomeModel!
   getTransactionById: Transaction!
   getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
   getUserAccounts: [AccountBalanceModel!]!
