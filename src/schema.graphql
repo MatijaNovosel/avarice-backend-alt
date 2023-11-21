@@ -78,6 +78,12 @@ input ChangePasswordInput {
   oldPassword: String!
 }
 
+input CreateAccountInput {
+  currency: String!
+  initialBalance: Int!
+  name: String!
+}
+
 input CreateTransactionInput {
   accountId: String!
   amount: Int!
@@ -104,6 +110,7 @@ input LoginInput {
 
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
+  createAccount(data: CreateAccountInput!): String!
   createTransaction(data: CreateTransactionInput!): Transaction!
   refreshToken(token: JWT!): Token!
   signIn(data: LoginInput!): Auth!

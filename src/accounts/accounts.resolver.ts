@@ -1,5 +1,5 @@
 import { UseGuards } from "@nestjs/common";
-import { Args, Query, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PrismaService } from "nestjs-prisma";
 import { GqlAuthGuard } from "../auth/gql-auth.guard";
 import { UserEntity } from "../common/decorators/user.decorator";
@@ -7,6 +7,7 @@ import { User } from "../users/models/user.model";
 import { AccountsService } from "./accounts.service";
 import { AccountExpenseAndIncomeInput } from "./dto/accountExpenseAndIncome.input";
 import { AccountHistoryInput } from "./dto/accountHistory.input";
+import { CreateAccountInput } from "./dto/createAccount.input";
 import { Account } from "./models/account.model";
 import { AccountBalanceModel } from "./models/accountBalance.model";
 import { AccountExpenseAndIncomeModel } from "./models/accountExpenseAndIncome.model";
@@ -19,6 +20,23 @@ export class AccountsResolver {
     private prisma: PrismaService,
     private accountService: AccountsService
   ) {}
+
+  @Mutation(() => String)
+  async createAccount(
+    @UserEntity() user: User,
+    @Args("data")
+    { currency, initialBalance, name }: CreateAccountInput
+  ) {
+    const account = await this.prisma.account.create({
+      data: {
+        currency,
+        initialBalance,
+        name,
+        userId: user.id
+      }
+    });
+    return account.id;
+  }
 
   @Query(() => [AccountBalanceModel])
   async getUserAccounts(@UserEntity() user: User) {
