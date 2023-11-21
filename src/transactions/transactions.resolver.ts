@@ -9,6 +9,7 @@ import { PaginationArgs } from "../common/pagination/pagination.args";
 import { User } from "../users/models/user.model";
 import { TransactionIdArgs } from "./args/transaction-id.args";
 import { CreateTransactionInput } from "./dto/createTransaction.input";
+import { DeleteTransactionInput } from "./dto/deleteTransaction.input";
 import { PostOrder } from "./dto/post-order.input";
 import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
@@ -26,9 +27,20 @@ export class TransactionsResolver {
   }
 
   @UseGuards(GqlAuthGuard)
+  @Mutation(() => String)
+  async deleteTransaction(@Args("data") { id }: DeleteTransactionInput) {
+    await this.prisma.transaction.delete({
+      where: {
+        id
+      }
+    });
+    return id;
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Transaction)
   async createTransaction(@Args("data") data: CreateTransactionInput) {
-    const newTransaction = this.prisma.transaction.create({
+    const newTransaction = await this.prisma.transaction.create({
       data
     });
     pubSub.publish("transactionCreated", {

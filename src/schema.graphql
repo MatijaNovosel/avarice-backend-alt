@@ -98,6 +98,10 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteTransactionInput {
+  id: String!
+}
+
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
@@ -112,6 +116,7 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): User!
   createAccount(data: CreateAccountInput!): String!
   createTransaction(data: CreateTransactionInput!): Transaction!
+  deleteTransaction(data: DeleteTransactionInput!): String!
   refreshToken(token: JWT!): Token!
   signIn(data: LoginInput!): Auth!
   signUp(data: SignupInput!): Auth!
