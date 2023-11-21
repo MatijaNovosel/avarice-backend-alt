@@ -14,6 +14,7 @@ export class CategoriesResolver {
   @Query(() => [Category])
   async getUserCategories(@UserEntity() user: User) {
     const categories = await this.prisma.category.findMany({
+      include: { parent: true },
       where: {
         userId: user.id
       }
