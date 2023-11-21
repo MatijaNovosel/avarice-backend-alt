@@ -40,7 +40,7 @@ Table Category {
   transactions Transaction [not null]
   templates Template [not null]
   userId String [not null]
-  parentId String [unique]
+  parentId String
 }
 
 Table Transaction {
