@@ -65,11 +65,11 @@ model Transaction {
   longitude Decimal
   latitude Decimal
   // Relations
-  account Account @relation("Account", fields: [accountId], references: [id])
+  account Account @relation("Account", fields: [accountId], references: [id], onDelete: Cascade)
   transferAccount Account? @relation("TransferAccount", fields: [transferAccountId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   // FK
-  categoryId String
+  categoryId String?
   accountId String
   transferAccountId String?
 }

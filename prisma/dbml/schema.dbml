@@ -53,8 +53,8 @@ Table Transaction {
   latitude Decimal [not null]
   account Account [not null]
   transferAccount Account
-  category Category [not null]
-  categoryId String [not null]
+  category Category
+  categoryId String
   accountId String [not null]
   transferAccountId String
 }
@@ -84,11 +84,11 @@ Ref: Category.userId > User.id
 
 Ref: Category.parentId - Category.id
 
-Ref: Transaction.accountId > Account.id
+Ref: Transaction.accountId > Account.id [delete: Cascade]
 
-Ref: Transaction.transferAccountId > Account.id
+Ref: Transaction.transferAccountId > Account.id [delete: Cascade]
 
-Ref: Transaction.categoryId > Category.id
+Ref: Transaction.categoryId > Category.id [delete: Set Null]
 
 Ref: Template.accountId > Account.id
 

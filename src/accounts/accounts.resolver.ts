@@ -8,6 +8,7 @@ import { AccountsService } from "./accounts.service";
 import { AccountExpenseAndIncomeInput } from "./dto/accountExpenseAndIncome.input";
 import { AccountHistoryInput } from "./dto/accountHistory.input";
 import { CreateAccountInput } from "./dto/createAccount.input";
+import { DeleteAccountInput } from "./dto/deleteAccount.input";
 import { Account } from "./models/account.model";
 import { AccountBalanceModel } from "./models/accountBalance.model";
 import { AccountExpenseAndIncomeModel } from "./models/accountExpenseAndIncome.model";
@@ -36,6 +37,19 @@ export class AccountsResolver {
       }
     });
     return account.id;
+  }
+
+  @Mutation(() => String)
+  async deleteAccount(
+    @Args("data")
+    { id }: DeleteAccountInput
+  ) {
+    await this.prisma.account.delete({
+      where: {
+        id
+      }
+    });
+    return id;
   }
 
   @Query(() => [AccountBalanceModel])

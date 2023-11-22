@@ -91,6 +91,7 @@ input CreateTransactionInput {
   description: String!
   latitude: Int!
   longitude: Int!
+  saveAsTemplate: Boolean!
 }
 
 """
@@ -98,7 +99,15 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input DeleteAccountInput {
+  id: String!
+}
+
 input DeleteTransactionInput {
+  id: String!
+}
+
+input DuplicateTransactionInput {
   id: String!
 }
 
@@ -116,7 +125,9 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): User!
   createAccount(data: CreateAccountInput!): String!
   createTransaction(data: CreateTransactionInput!): Transaction!
+  deleteAccount(data: DeleteAccountInput!): String!
   deleteTransaction(data: DeleteTransactionInput!): String!
+  duplicateTransaction(data: DuplicateTransactionInput!): String!
   refreshToken(token: JWT!): Token!
   signIn(data: LoginInput!): Auth!
   signUp(data: SignupInput!): Auth!
