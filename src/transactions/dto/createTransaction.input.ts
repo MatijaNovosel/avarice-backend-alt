@@ -21,4 +21,7 @@ export class CreateTransactionInput {
   @Field()
   @IsNotEmpty()
   categoryId: string;
+  @Field()
+  @IsNotEmpty()
+  saveAsTemplate: boolean;
 }

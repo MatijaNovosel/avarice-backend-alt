@@ -10,6 +10,7 @@ import { User } from "../users/models/user.model";
 import { TransactionIdArgs } from "./args/transaction-id.args";
 import { CreateTransactionInput } from "./dto/createTransaction.input";
 import { DeleteTransactionInput } from "./dto/deleteTransaction.input";
+import { DuplicateTransactionInput } from "./dto/duplicateTransaction.input";
 import { PostOrder } from "./dto/post-order.input";
 import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
@@ -38,10 +39,40 @@ export class TransactionsResolver {
   }
 
   @UseGuards(GqlAuthGuard)
+  @Mutation(() => String)
+  async duplicateTransaction(@Args("data") { id }: DuplicateTransactionInput) {
+    const transaction = await this.prisma.transaction.findFirst({
+      where: {
+        id
+      }
+    });
+
+    const newTransaction = await this.prisma.transaction.create({
+      data: {
+        accountId: transaction.accountId,
+        amount: transaction.amount,
+        description: transaction.description,
+        latitude: transaction.latitude,
+        longitude: transaction.longitude,
+        categoryId: transaction.categoryId
+      }
+    });
+
+    return newTransaction.id;
+  }
+
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Transaction)
   async createTransaction(@Args("data") data: CreateTransactionInput) {
     const newTransaction = await this.prisma.transaction.create({
-      data
+      data: {
+        accountId: data.accountId,
+        amount: data.amount,
+        description: data.description,
+        latitude: 0,
+        longitude: 0,
+        categoryId: data.categoryId
+      }
     });
     pubSub.publish("transactionCreated", {
       transactionCreated: newTransaction
