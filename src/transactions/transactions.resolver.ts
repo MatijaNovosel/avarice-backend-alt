@@ -74,9 +74,24 @@ export class TransactionsResolver {
         categoryId: data.categoryId
       }
     });
+
+    if (data.saveAsTemplate) {
+      await this.prisma.template.create({
+        data: {
+          accountId: data.accountId,
+          amount: data.amount,
+          description: data.description,
+          latitude: 0,
+          longitude: 0,
+          categoryId: data.categoryId
+        }
+      });
+    }
+
     pubSub.publish("transactionCreated", {
       transactionCreated: newTransaction
     });
+
     return newTransaction;
   }
 
