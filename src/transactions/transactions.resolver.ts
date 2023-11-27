@@ -14,13 +14,18 @@ import { Pagination } from "./dto/pagination.input";
 import { PostOrder } from "./dto/post-order.input";
 import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
+import { TransactionHeatmapModel } from "./models/transactionHeatmap.model";
+import { TransactionsService } from "./transactions.service";
 
 const pubSub = new PubSub();
 
 @Resolver(() => Transaction)
 @UseGuards(GqlAuthGuard)
 export class TransactionsResolver {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private transactionService: TransactionsService
+  ) {}
 
   @Subscription(() => Transaction)
   transactionCreated() {
@@ -139,8 +144,15 @@ export class TransactionsResolver {
 
   @Query(() => Transaction)
   async getTransactionById(@Args() id: TransactionIdArgs) {
-    return this.prisma.transaction.findUnique({
+    const transaction = await this.prisma.transaction.findUnique({
       where: { id: id.transactionId }
     });
+    return transaction;
+  }
+
+  @Query(() => [TransactionHeatmapModel])
+  async getHeatmap(@UserEntity() user: User) {
+    const heatmap = await this.transactionService.getHeatmap(user.id);
+    return heatmap;
   }
 }

@@ -172,6 +172,7 @@ enum PostOrderField {
 type Query {
   getAccountHistory(data: AccountHistoryInput!): [AccountHistoryModel!]!
   getExpenseAndIncomeInTimePeriod(data: AccountExpenseAndIncomeInput!): AccountExpenseAndIncomeModel!
+  getHeatmap: [TransactionHeatmapModel!]!
   getTransactionById: Transaction!
   getTransactions(orderBy: PostOrder, pagination: Pagination, query: String): TransactionConnection!
   getUserAccounts: [AccountBalanceModel!]!
@@ -249,6 +250,13 @@ type TransactionConnection {
 type TransactionEdge {
   cursor: String!
   node: Transaction!
+}
+
+type TransactionHeatmapModel {
+  date: DateTime!
+  value: Int!
+  week: Int!
+  weekDay: String!
 }
 
 input UpdateUserInput {
