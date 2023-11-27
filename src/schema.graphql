@@ -149,6 +149,11 @@ type PageInfo {
   startCursor: String
 }
 
+input Pagination {
+  skip: Int!
+  take: Int!
+}
+
 input PostOrder {
   direction: OrderDirection!
   field: PostOrderField!
@@ -168,7 +173,7 @@ type Query {
   getAccountHistory(data: AccountHistoryInput!): [AccountHistoryModel!]!
   getExpenseAndIncomeInTimePeriod(data: AccountExpenseAndIncomeInput!): AccountExpenseAndIncomeModel!
   getTransactionById: Transaction!
-  getTransactions(orderBy: PostOrder, query: String): TransactionConnection!
+  getTransactions(orderBy: PostOrder, pagination: Pagination, query: String): TransactionConnection!
   getUserAccounts: [AccountBalanceModel!]!
   getUserCategories: [Category!]!
   hello(name: String!): String!

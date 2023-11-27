@@ -5,12 +5,12 @@ import { PubSub } from "graphql-subscriptions";
 import { PrismaService } from "nestjs-prisma";
 import { GqlAuthGuard } from "../auth/gql-auth.guard";
 import { UserEntity } from "../common/decorators/user.decorator";
-import { PaginationArgs } from "../common/pagination/pagination.args";
 import { User } from "../users/models/user.model";
 import { TransactionIdArgs } from "./args/transaction-id.args";
 import { CreateTransactionInput } from "./dto/createTransaction.input";
 import { DeleteTransactionInput } from "./dto/deleteTransaction.input";
 import { DuplicateTransactionInput } from "./dto/duplicateTransaction.input";
+import { Pagination } from "./dto/pagination.input";
 import { PostOrder } from "./dto/post-order.input";
 import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
@@ -98,7 +98,8 @@ export class TransactionsResolver {
   @Query(() => TransactionConnection)
   async getTransactions(
     @UserEntity() user: User,
-    @Args() { after, before, first, last }: PaginationArgs,
+    @Args({ name: "pagination", type: () => Pagination, nullable: true })
+    { skip, take }: Pagination,
     @Args({ name: "query", type: () => String, nullable: true })
     query: string,
     @Args({
@@ -118,6 +119,8 @@ export class TransactionsResolver {
               userId: user.id
             }
           },
+          skip,
+          take,
           orderBy: orderBy ? { [orderBy.field]: orderBy.direction } : undefined,
           ...args
         }),
@@ -129,8 +132,7 @@ export class TransactionsResolver {
               userId: user.id
             }
           }
-        }),
-      { first, last, before, after }
+        })
     );
     return transactions;
   }
