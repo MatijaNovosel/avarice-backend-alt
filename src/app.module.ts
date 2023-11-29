@@ -11,6 +11,7 @@ import { AuthModule } from "./auth/auth.module";
 import { CategoriesModule } from "./categories/categories.module";
 import config from "./common/configs/config";
 import { GqlConfigService } from "./gql-config.service";
+import { TemplatesModule } from "./templates/template.module";
 import { TransactionsModule } from "./transactions/transactions.module";
 import { UsersModule } from "./users/users.module";
 
@@ -36,7 +37,8 @@ import { UsersModule } from "./users/users.module";
     UsersModule,
     TransactionsModule,
     CategoriesModule,
-    AccountsModule
+    AccountsModule,
+    TemplatesModule
   ],
   controllers: [AppController],
   providers: [AppService, AppResolver]

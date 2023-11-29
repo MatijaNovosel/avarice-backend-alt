@@ -177,6 +177,7 @@ type Query {
   getTransactions(orderBy: PostOrder, pagination: Pagination, query: String): TransactionConnection!
   getUserAccounts: [AccountBalanceModel!]!
   getUserCategories: [Category!]!
+  getUserTemplates: [Template!]!
   hello(name: String!): String!
   helloWorld: String!
   me: User!
