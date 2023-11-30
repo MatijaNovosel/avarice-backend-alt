@@ -12,6 +12,7 @@ import { DeleteTransactionInput } from "./dto/deleteTransaction.input";
 import { DuplicateTransactionInput } from "./dto/duplicateTransaction.input";
 import { Pagination } from "./dto/pagination.input";
 import { PostOrder } from "./dto/post-order.input";
+import { TransferInput } from "./dto/transfer.input";
 import { TransactionConnection } from "./models/transaction-connection.model";
 import { Transaction } from "./models/transaction.model";
 import { TransactionHeatmapModel } from "./models/transactionHeatmap.model";
@@ -98,6 +99,47 @@ export class TransactionsResolver {
     });
 
     return newTransaction;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => [String])
+  async transfer(
+    @Args("data") { accountFromId, accountToId, amount }: TransferInput
+  ) {
+    const accountFrom = await this.prisma.account.findFirst({
+      where: {
+        id: accountFromId
+      }
+    });
+    const accountTo = await this.prisma.account.findFirst({
+      where: {
+        id: accountToId
+      }
+    });
+    const description = `Transfer (${accountFrom.name} => ${accountTo.name})`;
+    const startRecord = await this.prisma.transaction.create({
+      data: {
+        accountId: accountFromId,
+        amount: amount * -1,
+        categoryId: "",
+        description,
+        transferAccountId: accountToId,
+        latitude: 0,
+        longitude: 0
+      }
+    });
+    const endRecord = await this.prisma.transaction.create({
+      data: {
+        accountId: accountToId,
+        amount: amount,
+        categoryId: "",
+        description,
+        transferAccountId: accountFromId,
+        latitude: 0,
+        longitude: 0
+      }
+    });
+    return [startRecord.id, endRecord.id];
   }
 
   @Query(() => TransactionConnection)
