@@ -9,23 +9,16 @@ export const weekNumber = (
   month?: number,
   day?: number
 ) => {
-  function serial(days: number) {
-    return 86400000 * days;
-  }
+  const serial = (days: number) => 86400000 * days;
 
-  function dateserial(year: number, month: number, day: number) {
-    return new Date(year, month - 1, day).valueOf();
-  }
+  const dateserial = (year: number, month: number, day: number) =>
+    new Date(year, month - 1, day).valueOf();
 
-  function weekday(date: number) {
-    return new Date(date).getDay() + 1;
-  }
+  const weekday = (date: number) => new Date(date).getDay() + 1;
 
-  function yearserial(date: number) {
-    return new Date(date).getFullYear();
-  }
+  const yearserial = (date: number) => new Date(date).getFullYear();
 
-  var date =
+  const date =
       year instanceof Date
         ? year.valueOf()
         : typeof year === "string"

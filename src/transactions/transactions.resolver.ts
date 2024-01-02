@@ -10,6 +10,7 @@ import { TransactionIdArgs } from "./args/transaction-id.args";
 import { CreateTransactionInput } from "./dto/createTransaction.input";
 import { DeleteTransactionInput } from "./dto/deleteTransaction.input";
 import { DuplicateTransactionInput } from "./dto/duplicateTransaction.input";
+import { EditTransactionInput } from "./dto/editTransaction.input";
 import { Pagination } from "./dto/pagination.input";
 import { PostOrder } from "./dto/post-order.input";
 import { TransferInput } from "./dto/transfer.input";
@@ -39,6 +40,24 @@ export class TransactionsResolver {
     await this.prisma.transaction.delete({
       where: {
         id
+      }
+    });
+    return id;
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => String)
+  async editTransaction(
+    @Args("data") { id, amount, description, categoryId }: EditTransactionInput
+  ) {
+    await this.prisma.transaction.update({
+      where: {
+        id
+      },
+      data: {
+        amount,
+        description,
+        categoryId
       }
     });
     return id;

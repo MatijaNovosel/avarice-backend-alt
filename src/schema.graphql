@@ -84,6 +84,13 @@ input CreateAccountInput {
   name: String!
 }
 
+input CreateCategoryInput {
+  color: String!
+  icon: String!
+  name: String!
+  parentId: String
+}
+
 input CreateTransactionInput {
   accountId: String!
   amount: Int!
@@ -111,6 +118,13 @@ input DuplicateTransactionInput {
   id: String!
 }
 
+input EditTransactionInput {
+  amount: Int!
+  categoryId: String!
+  description: String!
+  id: String!
+}
+
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
@@ -124,13 +138,16 @@ input LoginInput {
 type Mutation {
   changePassword(data: ChangePasswordInput!): User!
   createAccount(data: CreateAccountInput!): String!
+  createCategory(data: CreateCategoryInput!): String!
   createTransaction(data: CreateTransactionInput!): Transaction!
   deleteAccount(data: DeleteAccountInput!): String!
   deleteTransaction(data: DeleteTransactionInput!): String!
   duplicateTransaction(data: DuplicateTransactionInput!): String!
+  editTransaction(data: EditTransactionInput!): String!
   refreshToken(token: JWT!): Token!
   signIn(data: LoginInput!): Auth!
   signUp(data: SignupInput!): Auth!
+  transfer(data: TransferInput!): [String!]!
   updateUser(data: UpdateUserInput!): User!
 }
 
@@ -258,6 +275,12 @@ type TransactionHeatmapModel {
   value: Int!
   week: Int!
   weekDay: String!
+}
+
+input TransferInput {
+  accountFromId: String!
+  accountToId: String!
+  amount: Int!
 }
 
 input UpdateUserInput {

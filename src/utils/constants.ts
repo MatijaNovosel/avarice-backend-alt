@@ -74,11 +74,6 @@ export const PRESET_CATEGORIES = [
         color: "#1188ff"
       },
       {
-        name: "Home, garden",
-        icon: "mdi-home",
-        color: "#1188ff"
-      },
-      {
         name: "Jewels, accessories",
         icon: "mdi-diamond-stone",
         color: "#1188ff"
@@ -122,7 +117,7 @@ export const PRESET_CATEGORIES = [
       },
       {
         name: "Property insurance",
-        icon: "mdi-shield-bonus",
+        icon: "mdi-shield",
         color: "#f95500"
       },
       {
