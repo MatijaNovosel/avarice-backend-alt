@@ -66,20 +66,21 @@ export class TransactionsResolver {
   @UseGuards(GqlAuthGuard)
   @Mutation(() => String)
   async duplicateTransaction(@Args("data") { id }: DuplicateTransactionInput) {
-    const transaction = await this.prisma.transaction.findFirst({
-      where: {
-        id
-      }
-    });
+    const { accountId, amount, categoryId, description, latitude, longitude } =
+      await this.prisma.transaction.findFirst({
+        where: {
+          id
+        }
+      });
 
     const newTransaction = await this.prisma.transaction.create({
       data: {
-        accountId: transaction.accountId,
-        amount: transaction.amount,
-        description: transaction.description,
-        latitude: transaction.latitude,
-        longitude: transaction.longitude,
-        categoryId: transaction.categoryId
+        accountId,
+        amount,
+        description,
+        latitude,
+        longitude,
+        categoryId
       }
     });
 
@@ -88,27 +89,36 @@ export class TransactionsResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => Transaction)
-  async createTransaction(@Args("data") data: CreateTransactionInput) {
+  async createTransaction(
+    @Args("data")
+    {
+      accountId,
+      amount,
+      description,
+      categoryId,
+      saveAsTemplate
+    }: CreateTransactionInput
+  ) {
     const newTransaction = await this.prisma.transaction.create({
       data: {
-        accountId: data.accountId,
-        amount: data.amount,
-        description: data.description,
+        accountId,
+        amount,
+        description,
         latitude: 0,
         longitude: 0,
-        categoryId: data.categoryId
+        categoryId
       }
     });
 
-    if (data.saveAsTemplate) {
+    if (saveAsTemplate) {
       await this.prisma.template.create({
         data: {
-          accountId: data.accountId,
-          amount: data.amount,
-          description: data.description,
+          accountId,
+          amount,
+          description,
           latitude: 0,
           longitude: 0,
-          categoryId: data.categoryId
+          categoryId
         }
       });
     }
